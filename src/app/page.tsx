@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowRight, Compass, Fish, MapPin, MessageCircle, ShieldCheck, Store, TentTree } from "lucide-react";
 
 const sections = [
@@ -11,7 +12,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen pb-16">
       <header className="shell flex items-center justify-between gap-4 py-6">
-        <a href="/" className="flex items-center gap-3" aria-label="Клёвое место — главная">
+        <Link href="/" className="flex items-center gap-3" aria-label="Клёвое место — главная">
           <span className="grid size-11 place-items-center rounded-2xl border border-emerald-200/15 bg-emerald-300/10 text-emerald-200">
             <Fish size={23} />
           </span>
@@ -19,7 +20,7 @@ export default function HomePage() {
             <span className="block text-lg font-semibold tracking-tight">Клёвое место</span>
             <span className="block text-xs tracking-wide text-emerald-100/55">ВСЯ РОССИЯ · ОДНО СООБЩЕСТВО</span>
           </span>
-        </a>
+        </Link>
         <div className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-emerald-50/75 sm:flex">
           <MapPin size={15} className="text-emerald-300" />
           Выбор региона появится здесь
