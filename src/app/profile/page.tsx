@@ -105,12 +105,80 @@ function SectionContent({ active }: { active: SectionId }) {
 
 export default function ProfilePage() {
   const [active, setActive] = useState<SectionId>("overview");
-  const [profileName, setProfileName] = useState("Рыбак");
-  const [profileRegion, setProfileRegion] = useState("");
-  const [profileBio, setProfileBio] = useState("Здесь будет ваша рыболовная история: выезды, уловы, любимые водоёмы и люди, с которыми вы делитесь опытом.");
+  const [profileName, setProfileName] = useState("");
+  const [profileRegionId, setProfileRegionId] = useState("");
+  const [profileBio, setProfileBio] = useState("");
+  const [profileAvatar, setProfileAvatar] = useState("");
+  const [profileUser, setProfileUser] = useState<{ nickname: string; telegramLinked: boolean; yandexLinked: boolean } | null>(null);
+  const [regions, setRegions] = useState<{ id: string; name: string }[]>([]);
   const [editingProfile, setEditingProfile] = useState(false);
-  const profileCompletion = [profileName.trim(), profileRegion.trim(), profileBio.trim()].filter(Boolean).length * 33;
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [profileMessage, setProfileMessage] = useState("");
+  const profileRegion = useMemo(() => regions.find((region) => region.id === profileRegionId)?.name || "", [regions, profileRegionId]);
+  const profileCompletion = [profileName.trim(), profileRegionId.trim(), profileBio.trim()].filter(Boolean).length * 33;
   const current = sections.find((item) => item.id === active)!;
+
+  useEffect(() => {
+    let alive = true;
+    const loadAccount = async () => {
+      try {
+        const response = await fetch("/api/account/me", { cache: "no-store" });
+        if (!alive) return;
+        if (!response.ok) {
+          setProfileUser(null);
+          return;
+        }
+        const data = await response.json();
+        const user = data.user;
+        if (!user) return;
+        setProfileUser(user);
+        setProfileName(user.nickname || "");
+        setProfileBio(user.about || "");
+        setProfileAvatar(user.avatar || "");
+        setProfileRegionId(user.homeRegionId || "");
+      } catch {
+        if (alive) setProfileMessage("Не удалось загрузить данные аккаунта.");
+      }
+    };
+    fetch("/api/regions", { cache: "no-store" }).then(async (response) => {
+      if (!alive || !response.ok) return;
+      const catalog = await response.json();
+      if (alive && Array.isArray(catalog.regions)) setRegions(catalog.regions);
+    }).catch(() => undefined);
+    loadAccount();
+    const refreshAccount = () => { loadAccount(); };
+    window.addEventListener("klevoe:account-updated", refreshAccount);
+    return () => {
+      alive = false;
+      window.removeEventListener("klevoe:account-updated", refreshAccount);
+    };
+  }, []);
+
+  async function saveProfile() {
+    setSavingProfile(true);
+    setProfileMessage("");
+    try {
+      const response = await fetch("/api/account/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ about: profileBio, avatar: profileAvatar, homeRegionId: profileRegionId }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Не удалось сохранить профиль.");
+      const user = data.user;
+      setProfileUser(user);
+      setProfileName(user.nickname || profileName);
+      setProfileBio(user.about || "");
+      setProfileAvatar(user.avatar || "");
+      setProfileRegionId(user.homeRegionId || "");
+      setEditingProfile(false);
+      setProfileMessage("Профиль сохранён на сервере.");
+    } catch (error) {
+      setProfileMessage(error instanceof Error ? error.message : "Ошибка сохранения профиля.");
+    } finally {
+      setSavingProfile(false);
+    }
+  }
 
   return (
     <main className="min-h-screen bg-[#0b0d14] text-slate-100">
