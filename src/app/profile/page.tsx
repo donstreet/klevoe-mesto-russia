@@ -114,7 +114,8 @@ export default function ProfilePage() {
   const current = sections.find((item) => item.id === active)!;
 
   useEffect(() => {
-    if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("auth") === "1") setActive("settings");
+    const openedForAuth = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("auth") === "1";
+    if (openedForAuth) setActive("settings");
     let alive = true;
     const loadAccount = async () => {
       try {
@@ -128,6 +129,7 @@ export default function ProfilePage() {
         const user = data.user;
         if (!user) return;
         setProfileUser(user);
+        if (openedForAuth) setActive("overview");
         setProfileName(user.displayName || user.nickname || "");
         setProfileBio(user.about || "");
         setProfileAvatar(user.avatar || "");
@@ -143,10 +145,13 @@ export default function ProfilePage() {
     }).catch(() => undefined);
     loadAccount();
     const refreshAccount = () => { loadAccount(); };
+    const handleAuthSuccess = () => { setActive("overview"); };
     window.addEventListener("klevoe:account-updated", refreshAccount);
+    window.addEventListener("klevoe:auth-success", handleAuthSuccess);
     return () => {
       alive = false;
       window.removeEventListener("klevoe:account-updated", refreshAccount);
+      window.removeEventListener("klevoe:auth-success", handleAuthSuccess);
     };
   }, []);
 
