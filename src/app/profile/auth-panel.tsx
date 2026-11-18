@@ -62,6 +62,7 @@ export default function AuthPanel() {
       if (!response.ok) throw new Error(data.error || (isRegister ? "Не удалось зарегистрироваться." : "Не удалось войти."));
       setUser(data.user);
       window.dispatchEvent(new Event("klevoe:account-updated"));
+      window.dispatchEvent(new Event("klevoe:auth-success"));
       setPassword("");
       setRepeatPassword("");
       setMessage(isRegister
