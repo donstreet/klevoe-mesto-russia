@@ -80,7 +80,7 @@ function SectionContent({ active }: { active: SectionId }) {
       <div className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-4">
         <h3 className="font-semibold text-white">Способы входа и связи</h3>
         <p className="mt-1 text-xs text-slate-500">Пока это макет. Статусы не имитируют реальное подключение.</p>
-        {["Telegram", "MAX", "Яндекс"].map((name) => <div key={name} className="mt-3 flex items-center justify-between gap-3 border-t border-white/[0.06] pt-3">
+        {["Telegram", "Яндекс"].map((name) => <div key={name} className="mt-3 flex items-center justify-between gap-3 border-t border-white/[0.06] pt-3">
           <span className="text-sm text-slate-200">{name}</span><span className="rounded-full border border-slate-600/40 px-2.5 py-1 text-[11px] text-slate-400">Не подключено</span>
         </div>)}
       </div>
@@ -175,7 +175,7 @@ export default function ProfilePage() {
           </div>
           <div className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-4">
             <div className="flex items-center gap-2"><Link2 size={15} className="text-violet-300"/><h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Связанные сервисы</h3></div>
-            {["Telegram", "MAX", "Яндекс"].map((name) => <div key={name} className="mt-3 flex items-center justify-between border-b border-white/[0.05] pb-3 last:border-0 last:pb-0"><span className="text-xs text-slate-300">{name}</span><span className="text-[10px] text-slate-500">Не подключено</span></div>)}
+            {["Telegram", "Яндекс"].map((name) => <div key={name} className="mt-3 flex items-center justify-between border-b border-white/[0.05] pb-3 last:border-0 last:pb-0"><span className="text-xs text-slate-300">{name}</span><span className="text-[10px] text-slate-500">Не подключено</span></div>)}
           </div>
           <div className="rounded-2xl border border-cyan-300/10 bg-cyan-300/[0.035] p-4"><div className="flex items-center gap-2 text-cyan-200"><ShieldCheck size={16}/><span className="text-xs font-semibold">Защита аккаунта</span></div><p className="mt-2 text-xs leading-5 text-slate-400">Способы входа, восстановление доступа и активные сессии будут доступны в настройках.</p></div>
         </aside>
