@@ -125,10 +125,16 @@ export default function AdminPage() {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-[1600px] gap-4 px-3 py-4 sm:px-6 lg:grid-cols-[250px_minmax(0,1fr)_250px] lg:gap-4 lg:py-6">
-        <nav aria-label="Навигация админки" className="h-fit rounded-2xl border border-white/[0.07] bg-[#11141e] p-2 lg:sticky lg:top-[5.5rem]">
-          <div className="hidden px-3 pb-3 pt-2 lg:block"><p className="text-[10px] font-semibold tracking-[0.16em] text-slate-500">УПРАВЛЕНИЕ ПОРТАЛОМ</p></div>
-          <div className="flex gap-1 overflow-x-auto lg:flex-col lg:overflow-visible">
+      <div className="mx-auto grid min-w-0 max-w-[1600px] gap-3 overflow-x-hidden px-3 py-3 sm:px-6 lg:grid-cols-[250px_minmax(0,1fr)_250px] lg:gap-4 lg:py-6">
+        <div className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-2 lg:hidden">
+          <label htmlFor="admin-mobile-section" className="mb-1 block px-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">Раздел админки</label>
+          <select id="admin-mobile-section" value={active} onChange={(event) => setActive(event.target.value as AdminSection)} className="min-h-11 w-full min-w-0 rounded-xl border border-white/10 bg-[#171b27] px-3 text-sm text-white outline-none focus:border-cyan-300/40">
+            {adminSections.map(({id,label}) => <option key={id} value={id}>{label}</option>)}
+          </select>
+        </div>
+        <nav aria-label="Навигация админки" className="hidden h-fit min-w-0 rounded-2xl border border-white/[0.07] bg-[#11141e] p-2 lg:sticky lg:top-[5.5rem] lg:block">
+          <div className="px-3 pb-3 pt-2"><p className="text-[10px] font-semibold tracking-[0.16em] text-slate-500">УПРАВЛЕНИЕ ПОРТАЛОМ</p></div>
+          <div className="flex min-w-0 flex-col">
             {groups.map((group) => {
               const items = adminSections.filter((item) => item.group === group);
               return <div key={group} className="contents lg:block">
@@ -183,7 +189,7 @@ export default function AdminPage() {
           ) : active === "carousel" ? <CarouselEditorPreview/> : <PlaceholderPanel title={current.label} description={sectionDescriptions[active]}/>}
         </section>
 
-        <aside className="space-y-4">
+        <aside className="hidden min-w-0 space-y-4 lg:block">
           <div className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-4">
             <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Состояние панели</h3>
             <div className="mt-4 flex items-center gap-3"><div className="grid h-10 w-10 place-items-center rounded-xl bg-amber-300/10 text-amber-200"><Shield size={19}/></div><div><p className="text-sm font-medium text-white">Режим макета</p><p className="mt-0.5 text-[11px] text-slate-500">Без административных действий</p></div></div>
@@ -196,7 +202,7 @@ export default function AdminPage() {
           <div className="rounded-2xl border border-cyan-300/10 bg-cyan-300/[0.035] p-4"><div className="flex items-center gap-2 text-cyan-200"><Compass size={16}/><span className="text-xs font-semibold">Следующий этап</span></div><p className="mt-2 text-xs leading-5 text-slate-400">Подключить защищённые API, роли администратора и модератора, затем наполнить разделы реальными данными.</p></div>
         </aside>
       </div>
-      <footer className="mx-auto max-w-[1600px] px-6 pb-8 text-[10px] text-slate-600">Предварительный интерфейс административной панели. Реальные операции не выполняются.</footer>
+      <footer className="mx-auto hidden max-w-[1600px] px-6 pb-8 text-[10px] text-slate-600 lg:block">Предварительный интерфейс административной панели. Реальные операции не выполняются.</footer>
     </main>
   );
 }
