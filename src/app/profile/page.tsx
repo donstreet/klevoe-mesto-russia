@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   Activity, Award, Bell, BookOpen, Camera, ChevronRight, CircleUserRound,
   Compass, Fish, Link2, MapPin, MessageCircle, Settings, ShieldCheck,
@@ -108,10 +109,10 @@ export default function ProfilePage() {
     <main className="min-h-screen bg-[#0b0d14] text-slate-100">
       <header className="border-b border-white/[0.07] bg-[#0e111a]">
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-4 py-3 sm:px-6">
-          <a href="/" className="flex items-center gap-2.5">
+          <Link href="/" className="flex items-center gap-2.5">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-violet-500/30 to-cyan-400/20 text-cyan-200"><Fish size={19} /></span>
             <span><span className="block text-sm font-semibold">Клёвое место</span><span className="block text-[10px] tracking-[0.16em] text-slate-500">ЛИЧНЫЙ КАБИНЕТ</span></span>
-          </a>
+          </Link>
           <div className="flex items-center gap-2">
             <button aria-label="Уведомления" className="relative grid h-9 w-9 place-items-center rounded-xl border border-white/[0.08] text-slate-300"><Bell size={17}/><span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-violet-400"/></button>
             <Avatar label="Р" size="sm" />
