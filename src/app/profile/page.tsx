@@ -5,8 +5,8 @@ import AuthPanel from "./auth-panel";
 import Link from "next/link";
 import {
   Activity, Award, Bell, BookOpen, Camera, CircleUserRound,
-  Fish, Home, Link2, Mail, MapPin, MessageCircle, Newspaper, Rss, Settings, ShieldCheck,
-  Users
+  Compass, Fish, Home, Link2, Mail, MapPin, MessageCircle, Newspaper, Rss, Settings, ShieldCheck,
+  ShoppingBag, Users, Waves
 } from "lucide-react";
 
 const sections = [
@@ -42,7 +42,16 @@ function Avatar({ label, size = "md", src = "" }: { label: string; size?: "sm" |
 }
 
 function SectionContent({ active }: { active: SectionId }) {
-  const selected = sections.find((item) => item.id === active)!;
+  const selected = sections.find((item) => item.id === active);
+  const quickSection = quickAccess.find((item) => item.id === active);
+  if (quickSection) {
+    const QuickIcon = quickSection.icon;
+    return <div className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-5 sm:p-6">
+      <div className="flex items-center gap-3"><div className="grid h-11 w-11 place-items-center rounded-xl bg-cyan-400/10 text-cyan-200"><QuickIcon size={21}/></div><div><h3 className="font-semibold text-white">{quickSection.label}</h3><p className="text-xs text-slate-500">{quickSection.description}</p></div></div>
+      <div className="mt-4 rounded-xl border border-white/[0.06] bg-white/[0.025] p-4"><p className="text-sm text-slate-200">Раздел быстрого доступа</p><p className="mt-1 text-xs leading-5 text-slate-500">Переход уже добавлен. Переписки, публикации друзей и новостные материалы подключим к общей системе портала, без демонстрационных сообщений и выдуманных данных.</p></div>
+    </div>;
+  }
+  const selectedSection = selected!;
   if (active === "overview") {
     return (
       <div className="space-y-4">
@@ -118,7 +127,7 @@ export default function ProfilePage() {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileRegion = useMemo(() => regions.find((region) => region.id === profileRegionId)?.name || "", [regions, profileRegionId]);
   const profileCompletion = [profileName.trim(), profileRegionId.trim(), profileBio.trim()].filter(Boolean).length * 33;
-  const current = sections.find((item) => item.id === active)!;
+  const current = sections.find((item) => item.id === active) || { label: quickAccess.find((item) => item.id === active)?.label || "Обзор" };
 
   useEffect(() => {
     const openedForAuth = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("auth") === "1";
@@ -273,6 +282,16 @@ export default function ProfilePage() {
               <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 border-t border-white/[0.06] pt-4 text-xs text-slate-400"><span><b className="text-white">0</b> друзей</span><span><b className="text-white">0</b> подписчиков</span><span><b className="text-white">0</b> публикаций</span></div>
             </div>
           </div>
+
+          <section aria-label="Быстрый доступ" className="space-y-2">
+            <div className="flex items-center justify-between px-1"><div><p className="text-[10px] font-semibold tracking-[0.18em] text-cyan-300">БЫСТРЫЙ ДОСТУП</p><h2 className="mt-1 text-base font-semibold text-white">Всё важное под рукой</h2></div><span className="text-[10px] text-slate-500">Листай карточки →</span></div>
+            <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2">
+              {quickAccess.map(({ id, label, description, icon: Icon, tone }) => <button key={id} type="button" onClick={() => setActive(id)} aria-label={`Открыть: ${label}`} className={`group flex min-h-[104px] min-w-[220px] snap-start items-center gap-3 rounded-2xl border border-white/[0.08] bg-gradient-to-br ${tone} p-4 text-left transition hover:border-cyan-200/25 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 sm:min-w-[230px]`}>
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-white/[0.08] bg-[#0b0d14]/50 text-cyan-100"><Icon size={20}/></span>
+                <span className="min-w-0"><span className="block text-sm font-semibold text-white">{label}</span><span className="mt-1 block text-[11px] leading-4 text-slate-400">{description}</span></span>
+              </button>)}
+            </div>
+          </section>
 
           <div className="flex flex-wrap items-center justify-between gap-3 px-1">
             <div><p className="text-[10px] font-semibold tracking-[0.18em] text-cyan-300">ЛИЧНОЕ ПРОСТРАНСТВО</p><h2 className="mt-1 text-lg font-semibold text-white">{quickAccess.find((item) => item.id === active)?.label || current.label}</h2></div>
