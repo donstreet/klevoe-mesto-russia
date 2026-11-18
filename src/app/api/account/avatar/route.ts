@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { currentSessionToken, hasSameOrigin, legacyFetch, responseJson } from "@/lib/legacy-api";
+import { currentSessionToken, hasSameOrigin, legacyFetch, responseJson, LEGACY_API_BASE } from "@/lib/legacy-api";
 
 export const runtime = "nodejs";
 
@@ -21,6 +21,10 @@ export async function POST(request: Request) {
     outgoing.append("avatar", new Blob([await file.arrayBuffer()], { type: file.type }), file.name || "avatar");
     const upstream = await legacyFetch("/api/account/avatar", { method: "POST", body: outgoing }, token);
     const data = await responseJson(upstream);
+    if (upstream.ok && typeof data.avatar === "string" && data.avatar.startsWith("/uploads/")) {
+      data.avatar = `${LEGACY_API_BASE}${data.avatar}`;
+      if (data.user && typeof data.user === "object") data.user.avatar = data.avatar;
+    }
     return NextResponse.json(data, { status: upstream.status, headers: { "Cache-Control": "no-store" } });
   } catch {
     return NextResponse.json({ error: "Не удалось загрузить фотографию. Попробуйте ещё раз." }, { status: 503 });
