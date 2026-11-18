@@ -33,13 +33,13 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section className="shell grid gap-8 pb-14 pt-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:pt-20">
+      <section className="shell grid gap-5 pb-8 pt-7 sm:gap-8 sm:pb-14 sm:pt-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:pt-20">
         <div>
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-200/15 bg-emerald-200/[0.06] px-3 py-1.5 text-xs font-medium tracking-wide text-emerald-200">
             <span className="size-1.5 rounded-full bg-emerald-300" />
             ВСЕРОССИЙСКАЯ ПЛАТФОРМА РЫБОЛОВОВ
           </div>
-          <h1 className="max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="max-w-3xl text-3xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
             Твоя рыбалка.
             <span className="block text-emerald-300">Вся Россия.</span>
           </h1>
