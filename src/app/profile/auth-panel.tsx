@@ -6,15 +6,15 @@ import { LogIn, LogOut, ShieldCheck } from "lucide-react";
 type AccountUser = {
   id: string;
   nickname: string;
-  about?: string;
-  avatar?: string;
-  homeRegionId?: string;
-  role?: string;
   telegramLinked?: boolean;
   yandexLinked?: boolean;
 };
 
-type ProviderStatus = { telegram: { enabled: boolean }; yandex: { enabled: boolean }; unavailable?: boolean };
+type ProviderStatus = {
+  telegram: { enabled: boolean };
+  yandex: { enabled: boolean };
+  unavailable?: boolean;
+};
 
 export default function AuthPanel() {
   const [user, setUser] = useState<AccountUser | null>(null);
@@ -24,48 +24,6 @@ export default function AuthPanel() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
-
-use client";
-
-import { useEffect, useState } from "react";
-import { LogIn, LogOut, ShieldCheck } from "lucide-react";
-
-type AccountUser = {
-  id: string;
-  nickname: string;
-  about?: string;
-  avatar?: string;
-  homeRegionId?: string;
-  role?: string;
-  telegramLinked?: boolean;
-  yandexLinked?: boolean;
-};
-
-type ProviderStatus = { telegram: { enabled: boolean }; yandex: { enabled: boolean }; unavailable?: boolean };
-
-export default function AuthPanel() {
-  const [user, setUser] = useState<AccountUser | null>(null);
-  const [status, setStatus] = useState<ProviderStatus | null>(null);
-  const [nickname, setNickname] = useState("");
-  const [password, setPassword] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  async function refresh() {
-    const [accountResponse, statusResponse] = await Promise.all([
-      fetch("/api/account/me", { cache: "no-store" }),
-      fetch("/api/auth/status", { cache: "no-store" }),
-    ]);
-    if (accountResponse.ok) {
-      const data = await accountResponse.json();
-      setUser(data.user || null);
-    } else {
-      setUser(null);
-    }
-    if (statusResponse.ok) setStatus(await statusResponse.json());
-    else setStatus({ telegram: { enabled: false }, yandex: { enabled: false }, unavailable: true });
-  }
 
   useEffect(() => {
     let alive = true;
@@ -140,7 +98,7 @@ export default function AuthPanel() {
         {loading ? <p className="mt-4 text-sm text-slate-400">Проверяем сессию…</p> : user ? (
           <div className="mt-4">
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-300/15 bg-emerald-300/[0.05] p-3">
-              <div><p className="text-[11px] text-emerald-200">Вы вошли в существующий аккаунт</p><p className="mt-1 font-medium text-white">{user.nickname}</p><p className="mt-1 text-[10px] text-slate-500">ID: {user.id}</p></div>
+              <div><p className="text-[11px] text-emerald-200">Вы вошли в существующий аккаунт</p><p className="mt-1 font-medium text-white">{user.nickname}</p></div>
               <button onClick={logout} disabled={busy} className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-white/10 px-3 text-xs text-slate-300 disabled:opacity-50"><LogOut size={14}/> Выйти</button>
             </div>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
