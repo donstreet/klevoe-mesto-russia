@@ -106,6 +106,7 @@ export default function ProfilePage() {
   const [regions, setRegions] = useState<{ id: string; name: string }[]>([]);
   const [editingProfile, setEditingProfile] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [profileMessage, setProfileMessage] = useState("");
   const profileRegion = useMemo(() => regions.find((region) => region.id === profileRegionId)?.name || "", [regions, profileRegionId]);
   const profileCompletion = [profileName.trim(), profileRegionId.trim(), profileBio.trim()].filter(Boolean).length * 33;
@@ -125,7 +126,7 @@ export default function ProfilePage() {
         const user = data.user;
         if (!user) return;
         setProfileUser(user);
-        setProfileName(user.nickname || "");
+        setProfileName(user.displayName || user.nickname || "");
         setProfileBio(user.about || "");
         setProfileAvatar(user.avatar || "");
         setProfileRegionId(user.homeRegionId || "");
@@ -147,6 +148,36 @@ export default function ProfilePage() {
     };
   }, []);
 
+  async function uploadAvatar(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      setProfileMessage("Выберите фото JPG, PNG или WebP.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setProfileMessage("Фото должно быть не больше 5 МБ.");
+      return;
+    }
+    setUploadingAvatar(true);
+    setProfileMessage("");
+    try {
+      const form = new FormData();
+      form.append("avatar", file);
+      const response = await fetch("/api/account/avatar", { method: "POST", body: form });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Не удалось загрузить фотографию.");
+      setProfileAvatar(data.avatar || data.user?.avatar || "");
+      if (data.user) setProfileUser(data.user);
+      setProfileMessage("Фотография загружена и сохранена.");
+    } catch (error) {
+      setProfileMessage(error instanceof Error ? error.message : "Ошибка загрузки фотографии.");
+    } finally {
+      setUploadingAvatar(false);
+    }
+  }
+
   async function saveProfile() {
     setSavingProfile(true);
     setProfileMessage("");
@@ -154,13 +185,13 @@ export default function ProfilePage() {
       const response = await fetch("/api/account/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ about: profileBio, avatar: profileAvatar, homeRegionId: profileRegionId }),
+        body: JSON.stringify({ displayName: profileName, about: profileBio, avatar: profileAvatar, homeRegionId: profileRegionId }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Не удалось сохранить профиль.");
       const user = data.user;
       setProfileUser(user);
-      setProfileName(user.nickname || profileName);
+      setProfileName(user.displayName || user.nickname || profileName);
       setProfileBio(user.about || "");
       setProfileAvatar(user.avatar || "");
       setProfileRegionId(user.homeRegionId || "");
@@ -214,9 +245,9 @@ export default function ProfilePage() {
               </div>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">{profileBio || "Добавьте информацию о себе."}</p>{profileMessage && <p role="status" className="mt-3 text-xs text-cyan-200">{profileMessage}</p>}{!profileUser && <p className="mt-3 text-xs text-amber-200">Войдите в аккаунт в настройках, чтобы загрузить и редактировать свой профиль.</p>}
               {editingProfile && <div className="mt-4 grid gap-3 rounded-xl border border-violet-300/15 bg-[#0c1019] p-3 sm:grid-cols-2">
-                <label className="grid gap-1.5 text-xs text-slate-400">Имя аккаунта<input value={profileName} readOnly className="min-h-11 rounded-lg border border-white/10 bg-white/[0.025] px-3 text-sm text-slate-400" /><span className="text-[10px] text-slate-500">Никнейм аккаунта изменяется отдельно, чтобы не нарушать вход.</span></label>
+                <label className="grid gap-1.5 text-xs text-slate-400">Имя в профиле<input value={profileName} onChange={(event) => setProfileName(event.target.value)} maxLength={40} minLength={2} required className="min-h-11 rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm text-white outline-none focus:border-cyan-300/50" /><span className="text-[10px] text-slate-500">Это отображаемое имя. Логин для входа не меняется.</span></label>
                 <label className="grid gap-1.5 text-xs text-slate-400">Регион<select value={profileRegionId} onChange={(event) => setProfileRegionId(event.target.value)} className="min-h-11 rounded-lg border border-white/10 bg-[#171b27] px-3 text-sm text-white outline-none focus:border-cyan-300/50"><option value="">Регион не выбран</option>{regions.map((region) => <option key={region.id} value={region.id}>{region.name}</option>)}</select></label>
-                <label className="grid gap-1.5 text-xs text-slate-400 sm:col-span-2">Ссылка на аватар (HTTPS)<input value={profileAvatar} onChange={(event) => setProfileAvatar(event.target.value)} maxLength={500} placeholder="https://..." className="min-h-11 rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm text-white outline-none focus:border-cyan-300/50" /></label>
+                <label className="grid gap-1.5 text-xs text-slate-400 sm:col-span-2">Фотография профиля<input type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadAvatar} disabled={uploadingAvatar} className="min-h-11 w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white file:mr-3 file:rounded-lg file:border-0 file:bg-violet-500/20 file:px-3 file:py-1.5 file:text-xs file:text-violet-100 disabled:opacity-50" /><span className="text-[10px] text-slate-500">{uploadingAvatar ? "Загружаем фотографию…" : "Выберите фото прямо из галереи телефона или файлов компьютера. JPG, PNG, WebP, до 5 МБ."}</span></label>
                 <label className="grid gap-1.5 text-xs text-slate-400 sm:col-span-2">О себе<textarea value={profileBio} onChange={(event) => setProfileBio(event.target.value)} maxLength={500} rows={3} className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white outline-none focus:border-cyan-300/50" /></label>
                 <div className="flex flex-wrap items-center justify-between gap-2 sm:col-span-2"><span className="text-[11px] text-slate-500">Изменения сохраняются в аккаунте портала.</span><button onClick={saveProfile} disabled={savingProfile} className="min-h-11 rounded-lg bg-gradient-to-r from-violet-500 to-cyan-500 px-4 text-xs font-semibold text-white disabled:opacity-50">{savingProfile ? "Сохраняем…" : "Сохранить профиль"}</button></div>
               </div>}
