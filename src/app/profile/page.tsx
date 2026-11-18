@@ -5,8 +5,7 @@ import AuthPanel from "./auth-panel";
 import Link from "next/link";
 import {
   Activity, Award, Bell, BookOpen, Camera, CircleUserRound,
-  Compass, Fish, Home, Link2, Mail, MapPin, MessageCircle, Newspaper, Rss, Settings, ShieldCheck,
-  ShoppingBag, Users, Waves
+  Fish, Home, Link2, Mail, MapPin, Newspaper, Rss, Settings, ShieldCheck, Users
 } from "lucide-react";
 
 const sections = [
@@ -28,12 +27,6 @@ const quickSections = [
   { id: "news", label: "Новости", description: "Новости портала и водоёмов" },
 ] as const;
 
-const quickLinks = [
-  { label: "Водоёмы", icon: Waves },
-  { label: "Общение", icon: MessageCircle, count: "3" },
-  { label: "Магазин", icon: ShoppingBag },
-  { label: "Исследовать", icon: Compass },
-];
 
 function Avatar({ label, size = "md", src = "" }: { label: string; size?: "sm" | "md" | "lg"; src?: string }) {
   const dimensions = size === "lg" ? "h-20 w-20 text-2xl" : size === "sm" ? "h-9 w-9 text-xs" : "h-12 w-12 text-base";
@@ -248,10 +241,7 @@ export default function ProfilePage() {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-[1600px] gap-4 px-3 py-4 sm:px-6 lg:grid-cols-[62px_minmax(0,1fr)_250px] lg:gap-4 lg:py-6">
-        <nav aria-label="Основная навигация" className="flex gap-2 overflow-x-auto rounded-2xl border border-white/[0.07] bg-[#11141e] p-2 lg:sticky lg:top-[5.5rem] lg:h-fit lg:flex-col lg:overflow-visible">
-          {quickLinks.map(({ label, icon: Icon, count }) => <div key={label} aria-label={label} className="relative flex min-h-11 shrink-0 items-center gap-2 rounded-xl px-3 text-xs text-slate-300 lg:min-h-12 lg:justify-center lg:px-0" title={label}><Icon size={18} className="text-cyan-200"/><span className="lg:hidden">{label}</span>{count && <span className="grid h-4 min-w-4 place-items-center rounded-full bg-violet-500 px-1 text-[9px] text-white">{count}</span>}</div>)}
-        </nav>
+      <div className="mx-auto grid max-w-[1600px] gap-4 px-3 py-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_250px] lg:gap-4 lg:py-6">
 
         <section className="min-w-0 space-y-4">
           <div className="overflow-hidden rounded-2xl border border-white/[0.07] bg-[#11141e]">
