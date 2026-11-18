@@ -80,13 +80,6 @@ function SectionContent({ active }: { active: SectionId }) {
     return <div className="space-y-3">
       <AuthPanel />
       <div className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-4">
-        <h3 className="font-semibold text-white">Способы входа и связи</h3>
-        <p className="mt-1 text-xs text-slate-500">Пока это макет. Статусы не имитируют реальное подключение.</p>
-        {["Telegram", "Яндекс"].map((name) => <div key={name} className="mt-3 flex items-center justify-between gap-3 border-t border-white/[0.06] pt-3">
-          <span className="text-sm text-slate-200">{name}</span><span className="rounded-full border border-slate-600/40 px-2.5 py-1 text-[11px] text-slate-400">Не подключено</span>
-        </div>)}
-      </div>
-      <div className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-4">
         <h3 className="font-semibold text-white">Безопасность аккаунта</h3>
         <p className="mt-2 text-sm text-slate-400">Управление входом, сессиями и восстановлением доступа подключим отдельно. Существующие аккаунты портала не заменяются этим макетом.</p>
       </div>
