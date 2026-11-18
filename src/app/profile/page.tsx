@@ -4,9 +4,9 @@ import { useEffect, useMemo, useState } from "react";
 import AuthPanel from "./auth-panel";
 import Link from "next/link";
 import {
-  Activity, Award, Bell, BookOpen, Camera, ChevronRight, CircleUserRound,
-  Compass, Fish, Home, Link2, MapPin, MessageCircle, Settings, ShieldCheck,
-  ShoppingBag, Users, Waves
+  Activity, Award, Bell, BookOpen, Camera, CircleUserRound,
+  Fish, Home, Link2, Mail, MapPin, MessageCircle, Newspaper, Rss, Settings, ShieldCheck,
+  Users
 } from "lucide-react";
 
 const sections = [
@@ -20,7 +20,14 @@ const sections = [
   { id: "settings", label: "Настройки", icon: Settings },
 ] as const;
 
-type SectionId = (typeof sections)[number]["id"];
+type SectionId = (typeof sections)[number]["id"] | "messages" | "friends-feed" | "news";
+
+const quickAccess = [
+  { id: "messages", label: "Сообщения", description: "Личные переписки", icon: Mail, tone: "from-violet-400/20 to-indigo-400/5" },
+  { id: "friends", label: "Друзья", description: "Твои рыбацкие знакомые", icon: Users, tone: "from-cyan-400/20 to-sky-400/5" },
+  { id: "friends-feed", label: "Лента друзей", description: "Новые публикации друзей", icon: Rss, tone: "from-fuchsia-400/15 to-violet-400/5" },
+  { id: "news", label: "Новости", description: "Новости портала и водоёмов", icon: Newspaper, tone: "from-amber-300/15 to-orange-400/5" },
+] as const;
 
 const quickLinks = [
   { label: "Водоёмы", icon: Waves },
@@ -87,8 +94,8 @@ function SectionContent({ active }: { active: SectionId }) {
   }
 
   return <div className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-5 sm:p-6">
-    <div className="flex items-center gap-3"><div className="grid h-11 w-11 place-items-center rounded-xl bg-violet-400/10 text-violet-300"><selected.icon size={21} /></div><div><h3 className="font-semibold text-white">{selected.label}</h3><p className="text-xs text-slate-500">Раздел личного кабинета</p></div></div>
-    <p className="mt-4 max-w-xl text-sm leading-6 text-slate-400">Здесь будет содержимое раздела «{selected.label}»: записи, фотографии, управление и действия пользователя. Навигация уже переключается, наполнение подключим к данным профиля.</p>
+    <div className="flex items-center gap-3"><div className="grid h-11 w-11 place-items-center rounded-xl bg-violet-400/10 text-violet-300"><selectedSection.icon size={21} /></div><div><h3 className="font-semibold text-white">{selectedSection.label}</h3><p className="text-xs text-slate-500">Раздел личного кабинета</p></div></div>
+    <p className="mt-4 max-w-xl text-sm leading-6 text-slate-400">Здесь будет содержимое раздела «{selectedSection.label}»: записи, фотографии, управление и действия пользователя. Навигация уже переключается, наполнение подключим к данным профиля.</p>
     <div className="mt-5 grid gap-3 sm:grid-cols-2">
       <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4"><p className="text-sm text-slate-300">Личные материалы</p><p className="mt-1 text-xs text-slate-500">Появятся после подключения данных</p></div>
       <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4"><p className="text-sm text-slate-300">Управление разделом</p><p className="mt-1 text-xs text-slate-500">Действия будут доступны с телефона и ПК</p></div>
@@ -268,7 +275,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-3 px-1">
-            <div><p className="text-[10px] font-semibold tracking-[0.18em] text-cyan-300">ЛИЧНОЕ ПРОСТРАНСТВО</p><h2 className="mt-1 text-lg font-semibold text-white">{current.label}</h2></div>
+            <div><p className="text-[10px] font-semibold tracking-[0.18em] text-cyan-300">ЛИЧНОЕ ПРОСТРАНСТВО</p><h2 className="mt-1 text-lg font-semibold text-white">{quickAccess.find((item) => item.id === active)?.label || current.label}</h2></div>
             <span className="text-[11px] text-slate-500">Единые функции на телефоне и ПК</span>
           </div>
           <SectionContent active={active}/>
