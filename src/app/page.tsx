@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Compass, Fish, MapPin, MessageCircle, ShieldCheck, Store, TentTree } from "lucide-react";
 import AccountMenu from "./components/account-menu";
-import HeroCarousel from "./components/hero-carousel";
 
 const sections = [
   { title: "Водоёмы", description: "Карточки водоёмов, виды рыб, условия и точки ловли.", icon: Compass, status: "Основа каталога" },
@@ -33,7 +32,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section className="shell grid gap-3 pb-6 pt-4 sm:gap-8 sm:pb-14 sm:pt-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:pt-20">
+      <section className="shell pb-6 pt-4 sm:pb-14 sm:pt-12 lg:pt-20">
         <div>
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200/15 bg-emerald-200/[0.06] px-3 py-1.5 text-xs font-medium tracking-wide text-emerald-200">
             <span className="size-1.5 rounded-full bg-emerald-300" />
@@ -56,8 +55,6 @@ export default function HomePage() {
             </span>
           </div>
         </div>
-
-        <HeroCarousel />
       </section>
 
       <section id="sections" className="shell pt-5 sm:pt-8">
