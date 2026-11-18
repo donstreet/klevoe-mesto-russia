@@ -103,6 +103,11 @@ function SectionContent({ active }: { active: SectionId }) {
 
 export default function ProfilePage() {
   const [active, setActive] = useState<SectionId>("overview");
+  const [profileName, setProfileName] = useState("Рыбак");
+  const [profileRegion, setProfileRegion] = useState("");
+  const [profileBio, setProfileBio] = useState("Здесь будет ваша рыболовная история: выезды, уловы, любимые водоёмы и люди, с которыми вы делитесь опытом.");
+  const [editingProfile, setEditingProfile] = useState(false);
+  const profileCompletion = [profileName.trim(), profileRegion.trim(), profileBio.trim()].filter(Boolean).length * 33;
   const current = sections.find((item) => item.id === active)!;
 
   return (
@@ -115,7 +120,7 @@ export default function ProfilePage() {
           </Link>
           <div className="flex items-center gap-2">
             <button aria-label="Уведомления" className="relative grid h-9 w-9 place-items-center rounded-xl border border-white/[0.08] text-slate-300"><Bell size={17}/><span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-violet-400"/></button>
-            <Avatar label="Р" size="sm" />
+            <Avatar label={(profileName.trim()[0] || "Р").toUpperCase()} size="sm" />
           </div>
         </div>
       </header>
@@ -137,14 +142,20 @@ export default function ProfilePage() {
             <div className="h-24 bg-gradient-to-r from-violet-700/50 via-[#27344a] to-cyan-700/35 sm:h-32"/>
             <div className="px-4 pb-4 sm:px-6">
               <div className="-mt-10 flex flex-wrap items-end justify-between gap-3">
-                <Avatar label="Р" size="lg"/>
+                <Avatar label={(profileName.trim()[0] || "Р").toUpperCase()} size="lg"/>
                 <span className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-emerald-300/15 bg-emerald-300/[0.07] px-3 py-1.5 text-[11px] text-emerald-200"><span className="h-1.5 w-1.5 rounded-full bg-emerald-300"/> Макет профиля</span>
               </div>
               <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
-                <div><h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">Рыбак</h1><p className="mt-1 flex items-center gap-1.5 text-xs text-slate-500"><MapPin size={13}/> Регион не выбран</p></div>
-                <button onClick={() => setActive("settings")} className="rounded-xl border border-white/10 px-3 py-2 text-xs text-slate-300 transition hover:border-violet-300/30 hover:text-white"><Settings size={14} className="mr-1.5 inline"/> Настроить профиль</button>
+                <div><h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">{profileName || "Без имени"}</h1><p className="mt-1 flex items-center gap-1.5 text-xs text-slate-500"><MapPin size={13}/> {profileRegion || "Регион не выбран"}</p></div>
+                <button onClick={() => setEditingProfile((value) => !value)} className="rounded-xl border border-white/10 px-3 py-2 text-xs text-slate-300 transition hover:border-violet-300/30 hover:text-white"><Settings size={14} className="mr-1.5 inline"/> {editingProfile ? "Закрыть редактор" : "Редактировать профиль"}</button>
               </div>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">Здесь будет ваша рыболовная история: выезды, уловы, любимые водоёмы и люди, с которыми вы делитесь опытом.</p>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">{profileBio || "Добавьте информацию о себе."}</p>
+              {editingProfile && <div className="mt-4 grid gap-3 rounded-xl border border-violet-300/15 bg-[#0c1019] p-3 sm:grid-cols-2">
+                <label className="grid gap-1.5 text-xs text-slate-400">Имя в профиле<input value={profileName} onChange={(event) => setProfileName(event.target.value)} maxLength={40} className="min-h-11 rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm text-white outline-none focus:border-cyan-300/50" /></label>
+                <label className="grid gap-1.5 text-xs text-slate-400">Регион<select value={profileRegion} onChange={(event) => setProfileRegion(event.target.value)} className="min-h-11 rounded-lg border border-white/10 bg-[#171b27] px-3 text-sm text-white outline-none focus:border-cyan-300/50"><option value="">Выберите регион</option>{["Москва и Московская область","Санкт-Петербург и Ленинградская область","Ростовская область","Донецкая Народная Республика","Запорожская область","Краснодарский край","Самарская область","Саратовская область","Другой регион России"].map((region) => <option key={region} value={region}>{region}</option>)}</select></label>
+                <label className="grid gap-1.5 text-xs text-slate-400 sm:col-span-2">О себе<textarea value={profileBio} onChange={(event) => setProfileBio(event.target.value)} maxLength={300} rows={3} className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white outline-none focus:border-cyan-300/50" /></label>
+                <div className="flex flex-wrap items-center justify-between gap-2 sm:col-span-2"><span className="text-[11px] text-amber-200/80">Демо-режим: изменения пока хранятся только до перезагрузки страницы.</span><button onClick={() => setEditingProfile(false)} className="min-h-11 rounded-lg bg-gradient-to-r from-violet-500 to-cyan-500 px-4 text-xs font-semibold text-white">Готово</button></div>
+              </div>}
               <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 border-t border-white/[0.06] pt-4 text-xs text-slate-400"><span><b className="text-white">0</b> друзей</span><span><b className="text-white">0</b> подписчиков</span><span><b className="text-white">0</b> публикаций</span></div>
             </div>
           </div>
@@ -159,8 +170,8 @@ export default function ProfilePage() {
         <aside className="space-y-4">
           <div className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-4">
             <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Моя карточка</h3>
-            <div className="mt-4 flex items-center gap-3"><Avatar label="Р"/><div><p className="text-sm font-medium text-white">Рыбак</p><p className="mt-0.5 text-[11px] text-slate-500">Новый участник</p></div></div>
-            <div className="mt-4 rounded-xl bg-white/[0.035] p-3"><div className="flex items-center justify-between text-xs"><span className="text-slate-400">Заполнение профиля</span><span className="text-cyan-300">0%</span></div><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10"><div className="h-full w-0 rounded-full bg-cyan-300"/></div><p className="mt-2 text-[10px] text-slate-500">Добавьте регион и информацию о себе.</p></div>
+            <div className="mt-4 flex items-center gap-3"><Avatar label={(profileName.trim()[0] || "Р").toUpperCase()}/><div><p className="text-sm font-medium text-white">{profileName || "Без имени"}</p><p className="mt-0.5 text-[11px] text-slate-500">Новый участник</p></div></div>
+            <div className="mt-4 rounded-xl bg-white/[0.035] p-3"><div className="flex items-center justify-between text-xs"><span className="text-slate-400">Заполнение профиля</span><span className="text-cyan-300">{profileCompletion}%</span></div><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-cyan-300 transition-all" style={{ width: `${profileCompletion}%` }}/></div><p className="mt-2 text-[10px] text-slate-500">Добавьте регион и информацию о себе.</p></div>
           </div>
           <div className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-4">
             <div className="flex items-center gap-2"><Link2 size={15} className="text-violet-300"/><h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Связанные сервисы</h3></div>
