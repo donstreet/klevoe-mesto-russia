@@ -124,7 +124,7 @@ export default function ProfilePage() {
     const params = new URLSearchParams(window.location.search);
     const openedForAuth = params.get("auth") === "1";
     const requestedSection = params.get("section");
-    if (requestedSection && sections.some((item) => item.id === requestedSection)) setActive(requestedSection as SectionId);
+    if (requestedSection && (sections.some((item) => item.id === requestedSection) || quickSections.some((item) => item.id === requestedSection))) setActive(requestedSection as SectionId);
     else if (openedForAuth) setActive("settings");
     let alive = true;
     const loadAccount = async () => {
