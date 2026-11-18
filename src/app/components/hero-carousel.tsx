@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  ArrowLeft, ArrowRight, Compass, Fish, MapPin, MessageCircle,
+  ArrowLeft, ArrowRight, Compass, Fish, MapPin,
   Newspaper, ShoppingBag, TentTree
 } from "lucide-react";
 
