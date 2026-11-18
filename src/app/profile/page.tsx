@@ -5,7 +5,7 @@ import AuthPanel from "./auth-panel";
 import Link from "next/link";
 import {
   Activity, Award, Bell, BookOpen, Camera, ChevronRight, CircleUserRound,
-  Compass, Fish, Link2, MapPin, MessageCircle, Settings, ShieldCheck,
+  Compass, Fish, Home, Link2, MapPin, MessageCircle, Settings, ShieldCheck,
   ShoppingBag, Users, Waves
 } from "lucide-react";
 
@@ -78,7 +78,7 @@ function SectionContent({ active }: { active: SectionId }) {
 
   if (active === "settings") {
     return <div className="space-y-3">
-      <AuthPanel />
+      <div id="account-auth" className="scroll-mt-24"><AuthPanel /></div>
       <div className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-4">
         <h3 className="font-semibold text-white">Безопасность аккаунта</h3>
         <p className="mt-2 text-sm text-slate-400">Управление входом, сессиями и восстановлением доступа подключим отдельно. Существующие аккаунты портала не заменяются этим макетом.</p>
@@ -108,11 +108,13 @@ export default function ProfilePage() {
   const [savingProfile, setSavingProfile] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [profileMessage, setProfileMessage] = useState("");
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileRegion = useMemo(() => regions.find((region) => region.id === profileRegionId)?.name || "", [regions, profileRegionId]);
   const profileCompletion = [profileName.trim(), profileRegionId.trim(), profileBio.trim()].filter(Boolean).length * 33;
   const current = sections.find((item) => item.id === active)!;
 
   useEffect(() => {
+    if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("auth") === "1") setActive("settings");
     let alive = true;
     const loadAccount = async () => {
       try {
@@ -204,6 +206,10 @@ export default function ProfilePage() {
     }
   }
 
+  useEffect(() => {
+    if (active === "settings") document.getElementById("account-auth")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [active]);
+
   return (
     <main className="min-h-screen bg-[#0b0d14] text-slate-100">
       <header className="sticky top-0 z-30 border-b border-white/[0.07] bg-[#0e111a]/95 backdrop-blur">
@@ -213,23 +219,24 @@ export default function ProfilePage() {
             <span><span className="block text-sm font-semibold">Клёвое место</span><span className="block text-[10px] tracking-[0.16em] text-slate-500">ЛИЧНЫЙ КАБИНЕТ</span></span>
           </Link>
           <div className="flex items-center gap-2">
-            <button aria-label="Уведомления" className="relative grid h-9 w-9 place-items-center rounded-xl border border-white/[0.08] text-slate-300"><Bell size={17}/><span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-violet-400"/></button>
-            <Avatar label={(profileName.trim()[0] || "Р").toUpperCase()} size="sm" src={profileAvatar} />
+            <Link href="/" aria-label="Главная" title="Главная" className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-white/[0.09] px-3 text-xs text-slate-300 transition hover:border-cyan-300/30 hover:text-white"><Home size={16}/><span className="hidden sm:inline">Главная</span></Link>
+            <button aria-label="Уведомления" className="relative grid h-10 w-10 place-items-center rounded-xl border border-white/[0.08] text-slate-300"><Bell size={17}/><span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-violet-400"/></button>
+            <div className="relative">
+              <button type="button" aria-label="Меню профиля" aria-expanded={profileMenuOpen} onClick={() => setProfileMenuOpen((value) => !value)} className="grid h-10 w-10 place-items-center rounded-xl border border-white/[0.09] bg-white/[0.03] text-cyan-200 hover:border-cyan-300/30"><Avatar label={(profileName.trim()[0] || "Р").toUpperCase()} size="sm" src={profileAvatar}/></button>
+              {profileMenuOpen && <div className="absolute right-0 top-12 z-50 w-64 rounded-2xl border border-white/10 bg-[#151a27] p-2 shadow-2xl">
+                <p className="px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">Мой профиль</p>
+                {sections.map(({ id, label, icon: Icon }) => <button key={id} onClick={() => { setActive(id); setProfileMenuOpen(false); }} className={`flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm transition ${active === id ? "bg-cyan-300/10 text-cyan-100" : "text-slate-300 hover:bg-white/[0.05]"}`}><Icon size={16}/><span>{label}</span></button>)}
+                {!profileUser && <button onClick={() => { setActive("settings"); setProfileMenuOpen(false); }} className="mt-1 flex min-h-11 w-full items-center gap-3 rounded-xl border-t border-white/[0.07] px-3 pt-2 text-left text-sm text-amber-200"><CircleUserRound size={16}/>Войти / регистрация</button>}
+              </div>}
+            </div>
           </div>
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-[1600px] gap-4 px-3 py-4 sm:px-6 lg:grid-cols-[62px_210px_minmax(0,1fr)_250px] lg:gap-4 lg:py-6">
+      <div className="mx-auto grid max-w-[1600px] gap-4 px-3 py-4 sm:px-6 lg:grid-cols-[62px_minmax(0,1fr)_250px] lg:gap-4 lg:py-6">
         <nav aria-label="Основная навигация" className="flex gap-2 overflow-x-auto rounded-2xl border border-white/[0.07] bg-[#11141e] p-2 lg:sticky lg:top-[5.5rem] lg:h-fit lg:flex-col lg:overflow-visible">
           {quickLinks.map(({ label, icon: Icon, count }) => <div key={label} aria-label={label} className="relative flex min-h-11 shrink-0 items-center gap-2 rounded-xl px-3 text-xs text-slate-300 lg:min-h-12 lg:justify-center lg:px-0" title={label}><Icon size={18} className="text-cyan-200"/><span className="lg:hidden">{label}</span>{count && <span className="grid h-4 min-w-4 place-items-center rounded-full bg-violet-500 px-1 text-[9px] text-white">{count}</span>}</div>)}
         </nav>
-
-        <aside className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-3">
-          <div className="flex items-center justify-between px-2 pb-3 pt-1"><span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Мой профиль</span><span className="text-[10px] text-slate-600">8 разделов</span></div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-1">
-            {sections.map(({ id, label, icon: Icon }) => <button key={id} onClick={() => setActive(id)} aria-current={active === id ? "page" : undefined} className={`flex min-h-11 min-w-0 items-center gap-2 rounded-xl px-3 py-2.5 text-left text-xs transition sm:text-sm lg:w-full lg:gap-3 ${active === id ? "bg-gradient-to-r from-violet-500/20 to-cyan-400/10 text-white ring-1 ring-violet-300/15" : "text-slate-400 hover:bg-white/[0.04] hover:text-slate-200"}`}><Icon size={17} className={active === id ? "text-cyan-300" : "text-slate-500"}/><span>{label}</span>{active === id && <ChevronRight size={14} className="ml-auto hidden text-violet-300 lg:block"/>}</button>)}
-          </div>
-        </aside>
 
         <section className="min-w-0 space-y-4">
           <div className="overflow-hidden rounded-2xl border border-white/[0.07] bg-[#11141e]">
@@ -237,13 +244,13 @@ export default function ProfilePage() {
             <div className="px-4 pb-4 sm:px-6">
               <div className="-mt-10 flex flex-wrap items-end justify-between gap-3">
                 <Avatar label={(profileName.trim()[0] || "Р").toUpperCase()} size="lg" src={profileAvatar}/>
-                <span className={`mb-1 inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] ${profileUser ? "border-emerald-300/15 bg-emerald-300/[0.07] text-emerald-200" : "border-amber-300/15 bg-amber-300/[0.07] text-amber-200"}`}><span className="h-1.5 w-1.5 rounded-full bg-current"/>{profileUser ? "Аккаунт подключён" : "Требуется вход"}</span>
+                {profileUser ? <span className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-emerald-300/15 bg-emerald-300/[0.07] px-3 py-1.5 text-[11px] text-emerald-200"><span className="h-1.5 w-1.5 rounded-full bg-current"/>Аккаунт подключён</span> : <button type="button" onClick={() => setActive("settings")} className="mb-1 inline-flex min-h-9 items-center gap-1.5 rounded-full border border-amber-300/20 bg-amber-300/[0.07] px-3 py-1.5 text-[11px] text-amber-200 transition hover:bg-amber-300/[0.14]"><span className="h-1.5 w-1.5 rounded-full bg-current"/>Требуется вход</button>}
               </div>
               <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
                 <div><h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">{profileName || "Без имени"}</h1><p className="mt-1 flex items-center gap-1.5 text-xs text-slate-500"><MapPin size={13}/> {profileRegion || "Регион не выбран"}</p></div>
                 {profileUser && <button onClick={() => setEditingProfile((value) => !value)} className="rounded-xl border border-white/10 px-3 py-2 text-xs text-slate-300 transition hover:border-violet-300/30 hover:text-white"><Settings size={14} className="mr-1.5 inline"/> {editingProfile ? "Закрыть редактор" : "Редактировать профиль"}</button>}
               </div>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">{profileBio || "Добавьте информацию о себе."}</p>{profileMessage && <p role="status" className="mt-3 text-xs text-cyan-200">{profileMessage}</p>}{!profileUser && <p className="mt-3 text-xs text-amber-200">Войдите в аккаунт в настройках, чтобы загрузить и редактировать свой профиль.</p>}
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400">{profileBio || "Добавьте информацию о себе."}</p>{profileMessage && <p role="status" className="mt-3 text-xs text-cyan-200">{profileMessage}</p>}{!profileUser && <p className="mt-3 text-xs text-amber-200">Нажмите «Требуется вход», чтобы открыть вход и регистрацию.</p>}
               {editingProfile && <div className="mt-4 grid min-w-0 w-full max-w-full gap-3 overflow-hidden rounded-xl border border-violet-300/15 bg-[#0c1019] p-3 sm:grid-cols-2">
                 <label className="grid min-w-0 w-full gap-1.5 text-xs text-slate-400">Имя в профиле<input value={profileName} onChange={(event) => setProfileName(event.target.value)} maxLength={40} minLength={2} required className="box-border min-h-11 w-full min-w-0 max-w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm text-white outline-none focus:border-cyan-300/50" /><span className="min-w-0 break-words text-[10px] text-slate-500">Это отображаемое имя. Логин для входа не меняется.</span></label>
                 <label className="grid min-w-0 w-full gap-1.5 text-xs text-slate-400">Регион<select value={profileRegionId} onChange={(event) => setProfileRegionId(event.target.value)} className="box-border min-h-11 w-full min-w-0 max-w-full rounded-lg border border-white/10 bg-[#171b27] px-3 text-sm text-white outline-none focus:border-cyan-300/50"><option value="">Регион не выбран</option>{regions.map((region) => <option key={region.id} value={region.id}>{region.name}</option>)}</select></label>
