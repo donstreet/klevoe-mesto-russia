@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Compass, Fish, MapPin, MessageCircle, ShieldCheck, Store, TentTree } from "lucide-react";
 import AccountMenu from "./components/account-menu";
+import HeroCarousel from "./components/hero-carousel";
 
 const sections = [
   { title: "Водоёмы", description: "Карточки водоёмов, виды рыб, условия и точки ловли.", icon: Compass, status: "Основа каталога" },
@@ -56,26 +57,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="panel relative min-h-[290px] overflow-hidden p-6 sm:p-8">
-          <div className="absolute -right-12 -top-16 size-64 rounded-full bg-emerald-400/10 blur-3xl" />
-          <div className="relative flex h-full min-h-[240px] flex-col justify-between">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-emerald-50/65">Карта возможностей</span>
-              <span className="rounded-full border border-emerald-200/15 px-3 py-1 text-xs text-emerald-200">Россия</span>
-            </div>
-            <div className="my-8 grid grid-cols-3 gap-3">
-              {["Водоёмы", "Рыба", "Регионы"].map((item, index) => (
-                <div key={item} className="rounded-2xl border border-white/10 bg-white/[0.035] p-3">
-                  <div className="mb-3 text-2xl font-semibold text-emerald-200">{["01", "02", "03"][index]}</div>
-                  <div className="text-xs text-emerald-50/65">{item}</div>
-                </div>
-              ))}
-            </div>
-            <p className="max-w-sm text-sm leading-6 text-emerald-50/55">
-              Региональная структура заложена в основу проекта. Наполнение и интерактивные функции подключаются поэтапно.
-            </p>
-          </div>
-        </div>
+        <HeroCarousel />
       </section>
 
       <section id="sections" className="shell pt-8">
