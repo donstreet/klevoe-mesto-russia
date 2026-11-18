@@ -33,9 +33,9 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section className="shell grid gap-5 pb-8 pt-7 sm:gap-8 sm:pb-14 sm:pt-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:pt-20">
+      <section className="shell grid gap-3 pb-6 pt-4 sm:gap-8 sm:pb-14 sm:pt-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:pt-20">
         <div>
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-200/15 bg-emerald-200/[0.06] px-3 py-1.5 text-xs font-medium tracking-wide text-emerald-200">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200/15 bg-emerald-200/[0.06] px-3 py-1.5 text-xs font-medium tracking-wide text-emerald-200">
             <span className="size-1.5 rounded-full bg-emerald-300" />
             ВСЕРОССИЙСКАЯ ПЛАТФОРМА РЫБОЛОВОВ
           </div>
@@ -43,11 +43,11 @@ export default function HomePage() {
             Твоя рыбалка.
             <span className="block text-emerald-300">Вся Россия.</span>
           </h1>
-          <p className="muted mt-6 max-w-xl text-base leading-7 sm:text-lg">
+          <p className="muted mt-3 max-w-xl text-sm leading-6 sm:mt-6 sm:text-lg sm:leading-7">
             Водоёмы, проверенная информация, общение с рыболовами и места для отдыха.
             Всё в одном месте, с учётом твоего региона.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-4 flex flex-wrap gap-2 sm:mt-8 sm:gap-3">
             <a href="#sections" className="inline-flex items-center gap-2 rounded-full bg-emerald-300 px-5 py-3 text-sm font-semibold text-emerald-950 transition hover:bg-emerald-200">
               Исследовать портал <ArrowRight size={16} />
             </a>
@@ -60,7 +60,7 @@ export default function HomePage() {
         <HeroCarousel />
       </section>
 
-      <section id="sections" className="shell pt-8">
+      <section id="sections" className="shell pt-5 sm:pt-8">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-xs font-semibold tracking-[0.2em] text-emerald-300">ВОЗМОЖНОСТИ ПЛАТФОРМЫ</p>
