@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { legacyFetch, responseJson, SESSION_COOKIE } from "@/lib/legacy-api";
+import { hasSameOrigin, legacyFetch, responseJson, SESSION_COOKIE } from "@/lib/legacy-api";
 
 export const runtime = "nodejs";
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest) {\n  if (!hasSameOrigin(request)) return NextResponse.json({ error: "Недопустимый источник запроса." }, { status: 403 });
   const body = await request.json().catch(() => null) as { nickname?: string; password?: string } | null;
   const nickname = String(body?.nickname || "").trim();
   const password = String(body?.password || "");
