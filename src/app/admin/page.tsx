@@ -9,32 +9,48 @@ import {
 } from "lucide-react";
 
 const adminSections = [
-  { id: "overview", label: "Обзор", icon: LayoutDashboard, group: "Рабочее место" },
-  { id: "carousel", label: "Карусель главной", icon: Image, group: "Контент" },
-  { id: "waters", label: "Водоёмы", icon: Waves, group: "Контент" },
-  { id: "regions", label: "Регионы", icon: MapPin, group: "Контент" },
-  { id: "publications", label: "Публикации", icon: Newspaper, group: "Сообщество" },
-  { id: "users", label: "Пользователи", icon: Users, group: "Сообщество" },
-  { id: "reports", label: "Жалобы и модерация", icon: Flag, group: "Сообщество" },
-  { id: "shops", label: "Магазины и отдых", icon: ShoppingBag, group: "Справочники" },
-  { id: "sources", label: "Источники данных", icon: BookOpen, group: "Справочники" },
-  { id: "settings", label: "Настройки", icon: Settings, group: "Система" },
+  { id: "overview", label: "Главная страница", icon: LayoutDashboard, group: "Рабочее место" },
+  { id: "carousel", label: "Карусель главной", icon: Image, group: "Рабочее место" },
+  { id: "announcements", label: "Объявления администрации", icon: Bell, group: "Контент" },
+  { id: "waters", label: "Водоёмы", icon: Waves, group: "Водоёмы" },
+  { id: "add-water", label: "Добавить водоём", icon: Compass, group: "Водоёмы" },
+  { id: "fishing-spots", label: "Точки клёва", icon: MapPin, group: "Водоёмы" },
+  { id: "fish-species", label: "Виды рыб", icon: Fish, group: "Водоёмы" },
+  { id: "recreation", label: "Базы отдыха", icon: TentTree, group: "Справочники" },
+  { id: "base-owners", label: "Владельцы баз", icon: Users, group: "Справочники" },
+  { id: "shops", label: "Магазины", icon: ShoppingBag, group: "Справочники" },
+  { id: "market-moderation", label: "Модерация торговой площадки", icon: Shield, group: "Модерация" },
+  { id: "premium", label: "Премиум-разделы", icon: CheckCircle2, group: "Коммерция" },
+  { id: "support", label: "Техническая приёмная", icon: MessageCircle, group: "Модерация" },
+  { id: "chat-moderation", label: "Модерация чата", icon: MessageCircle, group: "Модерация" },
+  { id: "users", label: "Участники сайта", icon: Users, group: "Сообщество" },
+  { id: "regalia", label: "Рыбацкие регалии", icon: Flag, group: "Сообщество" },
+  { id: "settings", label: "Настройки и права", icon: Settings, group: "Система" },
 ] as const;
 
 type AdminSection = (typeof adminSections)[number]["id"];
 
 const sectionDescriptions: Record<AdminSection, string> = {
-  overview: "Состояние портала и быстрый доступ к административным разделам.",
-  carousel: "Слайды главной страницы: тексты, изображения, порядок и расписание публикаций.",
-  waters: "Каталог водоёмов, карточки, условия рыбалки и проверка информации.",
-  regions: "Региональная структура портала и настройки отображения разделов.",
-  publications: "Материалы сообщества, фотоотчёты и объявления.",
-  users: "Участники портала, роли и состояние аккаунтов.",
-  reports: "Обращения пользователей, жалобы и очередь модерации.",
-  shops: "Магазины, базы отдыха, кемпинги и карточки организаций.",
-  sources: "Источники, ссылки и дата последней проверки сведений.",
-  settings: "Параметры панели управления и административные права.",
+  overview: "Главная страница старой админки: сводка состояния портала и быстрые переходы.",
+  carousel: "Дополнительный редактор слайдов главной страницы: тексты, изображения и порядок показа.",
+  announcements: "Создание, редактирование и публикация объявлений администрации портала.",
+  waters: "Список водоёмов, поиск, проверка карточек и редактирование существующих записей.",
+  "add-water": "Создание карточки водоёма: регион, описание, фотографии, виды рыб, условия ловли и координаты.",
+  "fishing-spots": "Карта и редактор точек клёва, маркеров, глубин и заметок по местам ловли.",
+  "fish-species": "Справочник видов рыб и сведения для карточек водоёмов.",
+  recreation: "Каталог баз отдыха: карточки, фотографии, услуги, цены и условия размещения.",
+  "base-owners": "Заявки владельцев баз, проверка данных и управление доступом к кабинетам.",
+  shops: "Каталог рыболовных магазинов и управление доступом к кабинетам организаций.",
+  "market-moderation": "Проверка объявлений торговой площадки, жалобы, снятие публикаций и блокировки.",
+  premium: "Управление платными разделами, постоянным доступом и кодами активации.",
+  support: "Технические обращения пользователей, ответы и история решения проблем.",
+  "chat-moderation": "Жалобы на сообщения, удаление нарушений и временные ограничения участников чата.",
+  users: "Участники сайта, аккаунты, роли, блокировки и административные рассылки.",
+  regalia: "Правила, список наград и выдача рыбацких регалий участникам.",
+  settings: "Настройки портала, администраторы, модераторы, временные пароли и права доступа по разделам.",
 };
+
+
 
 function PlaceholderPanel({ title, description }: { title: string; description: string }) {
   return (
@@ -91,7 +107,7 @@ function CarouselEditorPreview() {
 export default function AdminPage() {
   const [active, setActive] = useState<AdminSection>("overview");
   const current = adminSections.find((item) => item.id === active)!;
-  const groups = ["Рабочее место", "Контент", "Сообщество", "Справочники", "Система"];
+  const groups = ["Рабочее место", "Контент", "Водоёмы", "Справочники", "Модерация", "Коммерция", "Сообщество", "Система"];
 
   return (
     <main className="min-h-screen bg-[#0b0d14] text-slate-100">
@@ -160,7 +176,7 @@ export default function AdminPage() {
               <div className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-4 sm:p-5">
                 <h3 className="font-semibold text-white">Быстрый переход</h3>
                 <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                  {adminSections.slice(1,5).map(({id,label,icon:Icon}) => <button key={id} type="button" onClick={() => setActive(id)} className="flex min-h-12 items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 text-left text-sm text-slate-300 transition hover:border-cyan-300/20 hover:bg-cyan-300/[0.04]"><Icon size={17} className="text-cyan-200"/><span className="flex-1">{label}</span><ArrowUpRight size={15} className="text-slate-600"/></button>)}
+                  {adminSections.slice(1,6).map(({id,label,icon:Icon}) => <button key={id} type="button" onClick={() => setActive(id)} className="flex min-h-12 items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 text-left text-sm text-slate-300 transition hover:border-cyan-300/20 hover:bg-cyan-300/[0.04]"><Icon size={17} className="text-cyan-200"/><span className="flex-1">{label}</span><ArrowUpRight size={15} className="text-slate-600"/></button>)}
                 </div>
               </div>
             </div>
