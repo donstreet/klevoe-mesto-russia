@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Compass, Fish, MapPin, MessageCircle, ShieldCheck, Store, TentTree } from "lucide-react";
+import AccountMenu from "./components/account-menu";
 
 const sections = [
   { title: "Водоёмы", description: "Карточки водоёмов, виды рыб, условия и точки ловли.", icon: Compass, status: "Основа каталога" },
@@ -25,9 +26,10 @@ export default function HomePage() {
           <MapPin size={15} className="text-emerald-300" />
           Выбор региона появится здесь
         </div>
-        <a href="#sections" className="rounded-full border border-emerald-200/20 px-4 py-2 text-sm text-emerald-100 transition hover:bg-emerald-200/10">
-          Разделы
-        </a>
+        <div className="flex items-center gap-2">
+          <a href="#sections" className="rounded-full border border-emerald-200/20 px-4 py-2 text-sm text-emerald-100 transition hover:bg-emerald-200/10">Разделы</a>
+          <AccountMenu />
+        </div>
       </header>
 
       <section className="shell grid gap-8 pb-14 pt-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:pt-20">
