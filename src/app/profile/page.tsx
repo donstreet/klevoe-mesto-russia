@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import AuthPanel from "./auth-panel";
 import Link from "next/link";
 import {
   Activity, Award, Bell, BookOpen, Camera, ChevronRight, CircleUserRound,
@@ -77,6 +78,7 @@ function SectionContent({ active }: { active: SectionId }) {
 
   if (active === "settings") {
     return <div className="space-y-3">
+      <AuthPanel />
       <div className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-4">
         <h3 className="font-semibold text-white">Способы входа и связи</h3>
         <p className="mt-1 text-xs text-slate-500">Пока это макет. Статусы не имитируют реальное подключение.</p>
