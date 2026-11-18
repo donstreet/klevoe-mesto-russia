@@ -82,13 +82,6 @@ export default function AuthPanel() {
       else setStatus({ telegram: { enabled: false }, yandex: { enabled: false }, unavailable: true });
     }).catch(() => setMessage("Не удалось связаться с сервисом аккаунтов."))
       .finally(() => { if (alive) setLoading(false); });
-    const params = new URLSearchParams(window.location.search);
-    const provider = params.get("telegram_auth") ? "Telegram" : params.get("yandex_auth") ? "Яндекс ID" : "";
-    const result = params.get("telegram_auth") || params.get("yandex_auth");
-    if (provider && result) {
-      setMessage(result === "linked" ? provider + " успешно привязан к аккаунту." : result === "cancelled" ? "Авторизация отменена." : "Не удалось завершить привязку " + provider + ".");
-      window.history.replaceState({}, "", window.location.pathname);
-    }
     return () => { alive = false; };
   }, []);
 
