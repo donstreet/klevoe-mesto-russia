@@ -12,6 +12,7 @@ export async function PUT(request: Request) {
     const upstream = await legacyFetch("/api/account/profile", {
       method: "PUT",
       body: JSON.stringify({
+        displayName: typeof body.displayName === "string" ? body.displayName : "",
         about: typeof body.about === "string" ? body.about : "",
         avatar: typeof body.avatar === "string" ? body.avatar : "",
         homeRegionId: typeof body.homeRegionId === "string" ? body.homeRegionId : "",
