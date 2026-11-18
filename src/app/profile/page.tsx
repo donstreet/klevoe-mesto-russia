@@ -20,7 +20,13 @@ const sections = [
   { id: "settings", label: "Настройки", icon: Settings },
 ] as const;
 
-type SectionId = (typeof sections)[number]["id"];
+type SectionId = (typeof sections)[number]["id"] | "messages" | "friends-feed" | "news";
+
+const quickSections = [
+  { id: "messages", label: "Сообщения", description: "Личные переписки" },
+  { id: "friends-feed", label: "Лента друзей", description: "Публикации друзей" },
+  { id: "news", label: "Новости", description: "Новости портала и водоёмов" },
+] as const;
 
 const quickLinks = [
   { label: "Водоёмы", icon: Waves },
@@ -112,7 +118,7 @@ export default function ProfilePage() {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileRegion = useMemo(() => regions.find((region) => region.id === profileRegionId)?.name || "", [regions, profileRegionId]);
   const profileCompletion = [profileName.trim(), profileRegionId.trim(), profileBio.trim()].filter(Boolean).length * 33;
-  const current = sections.find((item) => item.id === active) || sections[0];
+  const current = sections.find((item) => item.id === active) || quickSections.find((item) => item.id === active) || sections[0];
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
