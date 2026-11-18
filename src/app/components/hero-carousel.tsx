@@ -73,12 +73,12 @@ export default function HeroCarousel() {
   return (
     <section
       aria-label="Возможности Клёвого места"
-      className="panel relative min-h-[330px] overflow-hidden p-6 sm:min-h-[370px] sm:p-8"
+      className="panel relative min-h-[260px] overflow-hidden p-4 sm:min-h-[370px] sm:p-8"
     >
       <div className={`absolute inset-0 bg-gradient-to-br ${current.tone} transition-colors duration-500`} />
       <div className="absolute -right-16 -top-20 size-72 rounded-full border border-emerald-100/10" />
       <div className="absolute -right-5 -top-9 size-52 rounded-full border border-emerald-100/[0.07]" />
-      <div className="relative flex min-h-[278px] flex-col justify-between sm:min-h-[306px]">
+      <div className="relative flex min-h-[228px] flex-col justify-between sm:min-h-[306px]">
         <div className="flex items-center justify-between gap-3">
           <span className="text-xs font-semibold tracking-[0.18em] text-emerald-200">{current.eyebrow}</span>
           <span className="rounded-full border border-emerald-100/15 bg-black/10 px-3 py-1 text-xs text-emerald-100/75">
@@ -86,14 +86,14 @@ export default function HeroCarousel() {
           </span>
         </div>
 
-        <div key={active} className="my-7 animate-[fadeIn_.35s_ease-out]">
-          <div className="mb-5 grid size-14 place-items-center rounded-2xl border border-emerald-100/15 bg-emerald-200/10 text-emerald-200">
+        <div key={active} className="my-4 animate-[fadeIn_.35s_ease-out] sm:my-7">
+          <div className="mb-3 grid size-11 place-items-center sm:mb-5 sm:size-14 rounded-2xl border border-emerald-100/15 bg-emerald-200/10 text-emerald-200">
             <Icon size={27} strokeWidth={1.7} />
           </div>
-          <h2 className="max-w-lg text-2xl font-semibold leading-tight tracking-tight sm:text-3xl">
+          <h2 className="max-w-lg text-xl font-semibold leading-tight tracking-tight sm:text-3xl">
             {current.title}
           </h2>
-          <p className="mt-3 max-w-lg text-sm leading-6 text-emerald-50/65 sm:text-base">
+          <p className="mt-2 max-w-lg text-xs leading-5 text-emerald-50/65 sm:mt-3 sm:text-base sm:leading-6">
             {current.description}
           </p>
         </div>
