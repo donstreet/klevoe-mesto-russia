@@ -61,6 +61,7 @@ export default function AuthPanel() {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || (isRegister ? "Не удалось зарегистрироваться." : "Не удалось войти."));
       setUser(data.user);
+      window.dispatchEvent(new Event("klevoe:account-updated"));
       setPassword("");
       setRepeatPassword("");
       setMessage(isRegister
@@ -92,6 +93,7 @@ export default function AuthPanel() {
     try {
       await fetch("/api/account/logout", { method: "POST" });
       setUser(null);
+      window.dispatchEvent(new Event("klevoe:account-updated"));
       setMessage("Вы вышли из аккаунта.");
     } finally {
       setBusy(false);
