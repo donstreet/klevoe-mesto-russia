@@ -1,7 +1,34 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Link2, LogIn, LogOut, ShieldCheck } from "lucide-react";
+import { LogIn, LogOut, ShieldCheck } from "lucide-react";
+
+type AccountUser = {
+  id: string;
+  nickname: string;
+  about?: string;
+  avatar?: string;
+  homeRegionId?: string;
+  role?: string;
+  telegramLinked?: boolean;
+  yandexLinked?: boolean;
+};
+
+type ProviderStatus = { telegram: { enabled: boolean }; yandex: { enabled: boolean }; unavailable?: boolean };
+
+export default function AuthPanel() {
+  const [user, setUser] = useState<AccountUser | null>(null);
+  const [status, setStatus] = useState<ProviderStatus | null>(null);
+  const [nickname, setNickname] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+
+use client";
+
+import { useEffect, useState } from "react";
+import { LogIn, LogOut, ShieldCheck } from "lucide-react";
 
 type AccountUser = {
   id: string;
