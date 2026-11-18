@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { currentSessionToken, legacyFetch, responseJson } from "@/lib/legacy-api";
+import { currentSessionToken, hasSameOrigin, legacyFetch, responseJson } from "@/lib/legacy-api";
 
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest, context: { params: Promise<{ provider: string }> }) {
-  const { provider } = await context.params;
+  if (!hasSameOrigin(request)) return NextResponse.json({ error: "Недопустимый источник запроса." }, { status: 403 });\n  const { provider } = await context.params;
   if (provider !== "telegram" && provider !== "yandex") {
     return NextResponse.json({ error: "Неизвестный провайдер." }, { status: 404 });
   }
