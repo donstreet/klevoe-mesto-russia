@@ -107,7 +107,7 @@ export default function ProfilePage() {
 
   return (
     <main className="min-h-screen bg-[#0b0d14] text-slate-100">
-      <header className="border-b border-white/[0.07] bg-[#0e111a]">
+      <header className="sticky top-0 z-30 border-b border-white/[0.07] bg-[#0e111a]/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <Link href="/" className="flex items-center gap-2.5">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-violet-500/30 to-cyan-400/20 text-cyan-200"><Fish size={19} /></span>
@@ -121,14 +121,14 @@ export default function ProfilePage() {
       </header>
 
       <div className="mx-auto grid max-w-[1600px] gap-4 px-3 py-4 sm:px-6 lg:grid-cols-[62px_210px_minmax(0,1fr)_250px] lg:gap-4 lg:py-6">
-        <nav aria-label="Основная навигация" className="flex gap-2 overflow-x-auto rounded-2xl border border-white/[0.07] bg-[#11141e] p-2 lg:sticky lg:top-5 lg:h-fit lg:flex-col lg:overflow-visible">
-          {quickLinks.map(({ label, icon: Icon, count }) => <a key={label} href="#" aria-label={label} title={label} className="relative grid h-11 min-w-11 place-items-center rounded-xl text-slate-400 transition hover:bg-violet-400/10 hover:text-violet-200 lg:h-12 lg:min-w-0"><Icon size={19}/>{count && <span className="absolute right-1 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-violet-500 px-1 text-[9px] text-white">{count}</span>}<span className="sr-only">{label}</span></a>)}
+        <nav aria-label="Основная навигация" className="flex gap-2 overflow-x-auto rounded-2xl border border-white/[0.07] bg-[#11141e] p-2 lg:sticky lg:top-[5.5rem] lg:h-fit lg:flex-col lg:overflow-visible">
+          {quickLinks.map(({ label, icon: Icon, count }) => <div key={label} aria-label={label} className="relative flex min-h-11 shrink-0 items-center gap-2 rounded-xl px-3 text-xs text-slate-300 lg:min-h-12 lg:justify-center lg:px-0" title={label}><Icon size={18} className="text-cyan-200"/><span className="lg:hidden">{label}</span>{count && <span className="grid h-4 min-w-4 place-items-center rounded-full bg-violet-500 px-1 text-[9px] text-white">{count}</span>}</div>)}
         </nav>
 
         <aside className="rounded-2xl border border-white/[0.07] bg-[#11141e] p-3">
           <div className="flex items-center justify-between px-2 pb-3 pt-1"><span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Мой профиль</span><span className="text-[10px] text-slate-600">8 разделов</span></div>
-          <div className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
-            {sections.map(({ id, label, icon: Icon }) => <button key={id} onClick={() => setActive(id)} aria-current={active === id ? "page" : undefined} className={`flex shrink-0 items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition lg:w-full ${active === id ? "bg-gradient-to-r from-violet-500/20 to-cyan-400/10 text-white ring-1 ring-violet-300/15" : "text-slate-400 hover:bg-white/[0.04] hover:text-slate-200"}`}><Icon size={17} className={active === id ? "text-cyan-300" : "text-slate-500"}/><span>{label}</span>{active === id && <ChevronRight size={14} className="ml-auto hidden text-violet-300 lg:block"/>}</button>)}
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-1">
+            {sections.map(({ id, label, icon: Icon }) => <button key={id} onClick={() => setActive(id)} aria-current={active === id ? "page" : undefined} className={`flex min-h-11 min-w-0 items-center gap-2 rounded-xl px-3 py-2.5 text-left text-xs transition sm:text-sm lg:w-full lg:gap-3 ${active === id ? "bg-gradient-to-r from-violet-500/20 to-cyan-400/10 text-white ring-1 ring-violet-300/15" : "text-slate-400 hover:bg-white/[0.04] hover:text-slate-200"}`}><Icon size={17} className={active === id ? "text-cyan-300" : "text-slate-500"}/><span>{label}</span>{active === id && <ChevronRight size={14} className="ml-auto hidden text-violet-300 lg:block"/>}</button>)}
           </div>
         </aside>
 
@@ -151,7 +151,7 @@ export default function ProfilePage() {
 
           <div className="flex flex-wrap items-center justify-between gap-3 px-1">
             <div><p className="text-[10px] font-semibold tracking-[0.18em] text-cyan-300">ЛИЧНОЕ ПРОСТРАНСТВО</p><h2 className="mt-1 text-lg font-semibold text-white">{current.label}</h2></div>
-            <span className="text-[11px] text-slate-500">Мобильная и ПК-версии · единые функции</span>
+            <span className="text-[11px] text-slate-500">Единые функции на телефоне и ПК</span>
           </div>
           <SectionContent active={active}/>
         </section>
