@@ -4,7 +4,10 @@ import { currentSessionToken, hasSameOrigin, legacyFetch, responseJson } from "@
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest, context: { params: Promise<{ provider: string }> }) {
-  if (!hasSameOrigin(request)) return NextResponse.json({ error: "Недопустимый источник запроса." }, { status: 403 });\n  const { provider } = await context.params;
+  if (!hasSameOrigin(request)) {
+    return NextResponse.json({ error: "Недопустимый источник запроса." }, { status: 403 });
+  }
+  const { provider } = await context.params;
   if (provider !== "telegram" && provider !== "yandex") {
     return NextResponse.json({ error: "Неизвестный провайдер." }, { status: 404 });
   }
@@ -21,7 +24,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ pr
       return NextResponse.json({ error: data.error || "Не удалось начать привязку." }, { status: upstream.status || 502 });
     }
     const target = new URL(data.url);
-    if (target.protocol !== "https:" || target.hostname !== "oauth.telegram.org" && target.hostname !== "oauth.yandex.ru") {
+    if (target.protocol !== "https:" || (target.hostname !== "oauth.telegram.org" && target.hostname !== "oauth.yandex.ru")) {
       return NextResponse.json({ error: "Провайдер вернул недопустимый адрес авторизации." }, { status: 502 });
     }
     return NextResponse.json({ url: target.toString() }, { headers: { "Cache-Control": "no-store" } });
